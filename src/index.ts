@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express, { Request, Response } from "express";
 import { TelegramClient } from "telegram";
-import { StringSession } from "telegram/sessions";
+import { StringSession } from "./telegram-sessions.js";
 import qrcode from "qrcode-terminal";
 import fs from "fs";
 import path from "path";
@@ -61,7 +61,7 @@ async function getClient(): Promise<TelegramClient> {
         await client.signInUserWithQrCode(
           { apiId, apiHash },
           {
-            qrCode: async (qr) => {
+            qrCode: async (qr: { token: Buffer }) => {
               // Отображаем QR-код в консоли
               // qr.token - это Buffer, нужно преобразовать в правильный формат
               // Telegram QR-код имеет формат: tg://login?token=...
